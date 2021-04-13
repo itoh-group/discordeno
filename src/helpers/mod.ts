@@ -115,6 +115,7 @@ import { executeWebhook } from "./webhooks/execute_webhook.ts";
 import { getWebhook } from "./webhooks/get_webhook.ts";
 import { getWebhooks } from "./webhooks/get_webhooks.ts";
 import { getWebhookWithToken } from "./webhooks/get_webhook_with_token.ts";
+import { joinVoiceChannel } from "./channels/join_voice_channel.ts";
 
 export {
   addReaction,
@@ -239,6 +240,7 @@ export {
   unpinMessage,
   upsertSlashCommand,
   upsertSlashCommands,
+  joinVoiceChannel,
 };
 
 export let helpers = {
@@ -370,6 +372,7 @@ export let helpers = {
   getWebhookWithToken,
   getWebhook,
   getWebhooks,
+  joinVoiceChannel,
 };
 
 export type Helpers = typeof helpers;

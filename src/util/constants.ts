@@ -7,6 +7,9 @@ export const API_VERSION = 8;
 /** https://discord.com/developers/docs/topics/gateway#gateways-gateway-versions */
 export const GATEWAY_VERSION = 8;
 
+/** https://discord.com/developers/docs/topics/voice-connections#voice-gateway-versioning-gateway-versions */
+export const VOICE_GATEWAY_VERSION = 4;
+
 /** https://discord.com/developers/docs/reference#user-agent */
 export const USER_AGENT =
   "DiscordBot (https://github.com/discordeno/discordeno, v10)";

@@ -20,7 +20,10 @@ export async function handleVoiceStateUpdate(data: DiscordGatewayPayload) {
   if (!guild) return;
 
   const member = payload.member
-    ? await structures.createDiscordenoMember(camelKeysToSnakeCase(payload.member), guild.id)
+    ? await structures.createDiscordenoMember(
+      camelKeysToSnakeCase(payload.member),
+      guild.id,
+    )
     : await cacheHandlers.get("members", payload.userId);
   if (!member) return;
 
@@ -39,7 +42,7 @@ export async function handleVoiceStateUpdate(data: DiscordGatewayPayload) {
         eventHandlers.voiceChannelSwitch?.(
           member,
           payload.channelId,
-          cachedState.channelId
+          cachedState.channelId,
         );
       } else {
         // Was not in a channel before so user just joined

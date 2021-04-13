@@ -214,6 +214,7 @@ export {
   guildIconURL,
   guildSplashURL,
   isChannelSynced,
+  joinVoiceChannel,
   kick,
   kickMember,
   leaveGuild,
@@ -240,7 +241,6 @@ export {
   unpinMessage,
   upsertSlashCommand,
   upsertSlashCommands,
-  joinVoiceChannel,
 };
 
 export let helpers = {

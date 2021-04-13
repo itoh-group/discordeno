@@ -10,7 +10,7 @@ export async function joinVoiceChannel(
   options: {
     selfMute?: boolean;
     selfDeaf?: boolean;
-  } = {}
+  } = {},
 ) {
   await requireBotChannelPermissions(channelId, ["CONNECT"]);
 

@@ -10,14 +10,13 @@ export function voiceIdentify(
     url: string;
   },
 ) {
-
-    // {
-    //   op: DiscordVoiceOpcodes.Identify,
-    //   d: {
-    //     server_id: guildId,
-    //     user_id: botId,
-    //     session_id: data.sessionId,
-    //     token: data.token,
-    //   },
-    // }
+  // {
+  //   op: DiscordVoiceOpcodes.Identify,
+  //   d: {
+  //     server_id: guildId,
+  //     user_id: botId,
+  //     session_id: data.sessionId,
+  //     token: data.token,
+  //   },
+  // }
 }

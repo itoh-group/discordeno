@@ -3,6 +3,13 @@ import { ws } from "./ws.ts";
 
 export async function identify(shardId: number, maxShards: number) {
   ws.log("IDENTIFYING", { shardId, maxShards });
+
+  // Need to clear the old heartbeat interval
+  const oldShard = ws.shards.get(shardId);
+  if (oldShard) {
+    clearInterval(oldShard.heartbeat.intervalId);
+  }
+
   // CREATE A SHARD
   const socket = await ws.createShard(shardId);
 
@@ -26,6 +33,7 @@ export async function identify(shardId: number, maxShards: number) {
     },
     queue: [],
     processingQueue: false,
+    queueStartedAt: Date.now(),
   });
 
   socket.onopen = () => {

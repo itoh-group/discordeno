@@ -10,9 +10,12 @@ export const GATEWAY_VERSION = 8;
 /** https://discord.com/developers/docs/topics/voice-connections#voice-gateway-versioning-gateway-versions */
 export const VOICE_GATEWAY_VERSION = 4;
 
+/** https://github.com/discordeno/discordeno/releases */
+export const DISCORDENO_VERSION = 11;
+
 /** https://discord.com/developers/docs/reference#user-agent */
 export const USER_AGENT =
-  "DiscordBot (https://github.com/discordeno/discordeno, v10)";
+  `DiscordBot (https://github.com/discordeno/discordeno, v${DISCORDENO_VERSION})`;
 
 /** https://discord.com/developers/docs/reference#image-formatting-image-base-url */
 export const IMAGE_BASE_URL = "https://cdn.discordapp.com";
@@ -119,6 +122,8 @@ export const endpoints = {
     `${baseEndpoints.BASE_URL}/guilds/templates/${code}`,
   GUILD_TEMPLATES: (guildId: string) => `${GUILDS_BASE(guildId)}/templates`,
   GUILD_PREVIEW: (guildId: string) => `${GUILDS_BASE(guildId)}/preview`,
+  UPDATE_VOICE_STATE: (guildId: string, userId?: string) =>
+    `${GUILDS_BASE(guildId)}/voice-states/${userId ?? "@me"}`,
 
   // Voice
   VOICE_REGIONS: `${baseEndpoints.BASE_URL}/voice/regions`,

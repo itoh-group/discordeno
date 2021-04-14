@@ -7,12 +7,24 @@ export function log(
   data: { shardId: number; payload: CloseEvent },
 ): unknown;
 export function log(
+  type: "VOICE_CLOSED",
+  data: { guildId: number; payload: CloseEvent },
+): unknown;
+export function log(
   type: "CLOSED_RECONNECT",
   data: { shardId: number; payload: CloseEvent },
 ): unknown;
 export function log(
+  type: "VOICE_CLOSED_RECONNECT",
+  data: { guildId: number; payload: CloseEvent },
+): unknown;
+export function log(
   type: "ERROR",
   data: Record<string, unknown> & { shardId: number },
+): unknown;
+export function log(
+  type: "VOICE_ERROR",
+  data: Record<string, unknown> & { guildId: number },
 ): unknown;
 export function log(
   type: "HEARTBEATING",
@@ -48,6 +60,9 @@ export function log(
     | "CLOSED"
     | "CLOSED_RECONNECT"
     | "ERROR"
+    | "VOICE_CLOSED"
+    | "VOICE_CLOSED_RECONNECT"
+    | "VOICE_ERROR"
     | "HEARTBEATING"
     | "HEARTBEATING_CLOSED"
     | "HEARTBEATING_DETAILS"

@@ -13,6 +13,9 @@ import { startGateway } from "./start_gateway.ts";
 import { processQueue } from "./process_queue.ts";
 import { tellClusterToIdentify } from "./tell_cluster_to_identify.ts";
 import { DiscordGatewayOpcodes } from "../types/codes/gateway_opcodes.ts";
+import { DiscordVoiceOpcodes } from "../types/codes/voice_opcodes.ts";
+import { setupVoiceConnection } from "./voice/setup_voice_connection.ts";
+import { createVoiceConnection } from "./voice/create_voice_connection.ts";
 
 // CONTROLLER LIKE INTERFACE FOR WS HANDLING
 export const ws = {
@@ -71,6 +74,8 @@ export const ws = {
     },
   },
   shards: new Collection<number, DiscordenoShard>(),
+  /** guildId,  */
+  voiceShards: new Collection<string, DiscordenoVoiceShard>(),
   loadingShards: new Collection<
     number,
     {
@@ -108,6 +113,10 @@ export const ws = {
   handleOnMessage,
   /** Handles processing queue of requests send to this shard */
   processQueue,
+
+  // VOICE RELATED
+  createVoiceConnection,
+  setupVoiceConnection,
 };
 
 export interface DiscordenoShard {
@@ -148,10 +157,17 @@ export interface DiscordenoShard {
 }
 
 export interface WebSocketRequest {
-  op: DiscordGatewayOpcodes;
+  op: DiscordGatewayOpcodes | DiscordVoiceOpcodes;
   d: unknown;
-  // guildId: string;
-  // shardId: number;
-  // nonce?: string;
-  // options?: Record<string, unknown>;
+}
+
+export interface DiscordenoVoiceShard {
+  /** The token for this connection, received from VOICE_SERVER_UPDATE event when joining a voice channel */
+  token?: string;
+  /** The url for this connection, received from VOICE_SERVER_UPDATE event when joining a voice channel */
+  url?: string;
+  /** The sessionId for this connection, received from VOICE_STATE_UPDATE event when joining a voice channel */
+  sessionId?: string;
+  /** The channelId for this connection, received from VOICE_STATE_UPDATE event when joining a voice channel */
+  channelId?: string;
 }

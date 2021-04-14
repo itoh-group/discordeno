@@ -6,6 +6,7 @@ import {
   VoiceServerUpdate,
 } from "../../types/voice/voice_server_update.ts";
 import { snakeKeysToCamelCase } from "../../util/utils.ts";
+import { ws } from "../../ws/ws.ts";
 
 export async function handleVoiceServerUpdate(data: DiscordGatewayPayload) {
   const payload = snakeKeysToCamelCase<VoiceServerUpdate>(
@@ -15,5 +16,9 @@ export async function handleVoiceServerUpdate(data: DiscordGatewayPayload) {
   const guild = await cacheHandlers.get("guilds", payload.guildId);
   if (!guild) return;
 
+  ws.setupVoiceConnection(guild.shardId, guild.id, {
+    token: payload.token,
+    url: payload.endpoint,
+  });
   eventHandlers.voiceServerUpdate?.(payload, guild);
 }

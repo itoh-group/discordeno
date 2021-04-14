@@ -1,8 +1,7 @@
-import { eventHandlers } from "../../bot.ts";
+import { botId, eventHandlers } from "../../bot.ts";
 import { cacheHandlers } from "../../cache.ts";
 import { structures } from "../../structures/mod.ts";
 import { DiscordGatewayPayload } from "../../types/gateway/gateway_payload.ts";
-import { DiscordGuildMemberWithUser } from "../../types/mod.ts";
 import {
   DiscordVoiceState,
   VoiceState,
@@ -11,6 +10,7 @@ import {
   camelKeysToSnakeCase,
   snakeKeysToCamelCase,
 } from "../../util/utils.ts";
+import { ws } from "../../ws/ws.ts";
 
 export async function handleVoiceStateUpdate(data: DiscordGatewayPayload) {
   const payload = snakeKeysToCamelCase<VoiceState>(data.d as DiscordVoiceState);
@@ -53,6 +53,13 @@ export async function handleVoiceStateUpdate(data: DiscordGatewayPayload) {
       guild.voiceStates.delete(payload.userId);
       eventHandlers.voiceChannelLeave?.(member, cachedState.channelId);
     }
+  }
+
+  if (member.id === botId && payload.channelId) {
+    ws.setupVoiceConnection(guild.shardId, guild.id, {
+      sessionId: payload.sessionId,
+      channelId: payload.channelId,
+    });
   }
 
   eventHandlers.voiceStateUpdate?.(member, payload);

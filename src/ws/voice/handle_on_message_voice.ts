@@ -33,92 +33,92 @@ export function handleOnMessage(message: any, guildId: string) {
 
       // Begin heartbeating interval
       ws.heartbeat();
-    // case DiscordGatewayOpcodes.Heartbeat:
-    //   if (shard?.ws.readyState !== WebSocket.OPEN) return;
+      // case DiscordGatewayOpcodes.Heartbeat:
+      //   if (shard?.ws.readyState !== WebSocket.OPEN) return;
 
-    //   shard.heartbeat.lastSentAt = Date.now();
-    //   // Discord randomly sends this requiring an immediate heartbeat back
-    //   shard?.queue.push({
-    //     op: DiscordGatewayOpcodes.Heartbeat,
-    //     d: shard?.previousSequenceNumber,
-    //   });
-    //   break;
-    // case DiscordGatewayOpcodes.Hello:
-    //   ws.heartbeat(
-    //     guildId,
-    //     (messageData.d as DiscordHello).heartbeat_interval,
-    //   );
-    //   break;
-    // case DiscordGatewayOpcodes.HeartbeatACK:
-    //   if (ws.shards.has(guildId)) {
-    //     ws.shards.get(guildId)!.heartbeat.acknowledged = true;
-    //   }
-    //   break;
-    // case DiscordGatewayOpcodes.Reconnect:
-    //   ws.log("RECONNECT", { guildId });
+      //   shard.heartbeat.lastSentAt = Date.now();
+      //   // Discord randomly sends this requiring an immediate heartbeat back
+      //   shard?.queue.push({
+      //     op: DiscordGatewayOpcodes.Heartbeat,
+      //     d: shard?.previousSequenceNumber,
+      //   });
+      //   break;
+      // case DiscordGatewayOpcodes.Hello:
+      //   ws.heartbeat(
+      //     guildId,
+      //     (messageData.d as DiscordHello).heartbeat_interval,
+      //   );
+      //   break;
+      // case DiscordGatewayOpcodes.HeartbeatACK:
+      //   if (ws.shards.has(guildId)) {
+      //     ws.shards.get(guildId)!.heartbeat.acknowledged = true;
+      //   }
+      //   break;
+      // case DiscordGatewayOpcodes.Reconnect:
+      //   ws.log("RECONNECT", { guildId });
 
-    //   if (ws.shards.has(guildId)) {
-    //     ws.shards.get(guildId)!.resuming = true;
-    //   }
+      //   if (ws.shards.has(guildId)) {
+      //     ws.shards.get(guildId)!.resuming = true;
+      //   }
 
-    //   await resume(guildId);
-    //   break;
-    // case DiscordGatewayOpcodes.InvalidSession:
-    //   ws.log("INVALID_SESSION", { guildId, payload: messageData });
+      //   await resume(guildId);
+      //   break;
+      // case DiscordGatewayOpcodes.InvalidSession:
+      //   ws.log("INVALID_SESSION", { guildId, payload: messageData });
 
-    //   // When d is false we need to reidentify
-    //   if (!messageData.d) {
-    //     await identify(guildId, ws.maxShards);
-    //     break;
-    //   }
+      //   // When d is false we need to reidentify
+      //   if (!messageData.d) {
+      //     await identify(guildId, ws.maxShards);
+      //     break;
+      //   }
 
-    //   if (ws.shards.has(guildId)) {
-    //     ws.shards.get(guildId)!.resuming = true;
-    //   }
+      //   if (ws.shards.has(guildId)) {
+      //     ws.shards.get(guildId)!.resuming = true;
+      //   }
 
-    //   await resume(guildId);
-    //   break;
-    // default:
-    //   if (messageData.t === "RESUMED") {
-    //     ws.log("RESUMED", { guildId });
+      //   await resume(guildId);
+      //   break;
+      // default:
+      //   if (messageData.t === "RESUMED") {
+      //     ws.log("RESUMED", { guildId });
 
-    //     if (ws.shards.has(guildId)) {
-    //       ws.shards.get(guildId)!.resuming = false;
-    //     }
-    //     break;
-    //   }
+      //     if (ws.shards.has(guildId)) {
+      //       ws.shards.get(guildId)!.resuming = false;
+      //     }
+      //     break;
+      //   }
 
-    //   // Important for RESUME
-    //   if (messageData.t === "READY") {
-    //     const shard = ws.shards.get(guildId);
-    //     if (shard) {
-    //       shard.sessionId = (messageData.d as DiscordReady).session_id;
-    //     }
+      //   // Important for RESUME
+      //   if (messageData.t === "READY") {
+      //     const shard = ws.shards.get(guildId);
+      //     if (shard) {
+      //       shard.sessionId = (messageData.d as DiscordReady).session_id;
+      //     }
 
-    //     ws.loadingShards.get(guildId)?.resolve(true);
-    //     ws.loadingShards.delete(guildId);
-    //   }
+      //     ws.loadingShards.get(guildId)?.resolve(true);
+      //     ws.loadingShards.delete(guildId);
+      //   }
 
-    //   // Update the sequence number if it is present
-    //   if (messageData.s) {
-    //     const shard = ws.shards.get(guildId);
-    //     if (shard) {
-    //       shard.previousSequenceNumber = messageData.s;
-    //     }
-    //   }
+      //   // Update the sequence number if it is present
+      //   if (messageData.s) {
+      //     const shard = ws.shards.get(guildId);
+      //     if (shard) {
+      //       shard.previousSequenceNumber = messageData.s;
+      //     }
+      //   }
 
-    //   if (ws.url) await ws.handleDiscordPayload(messageData, guildId);
-    //   else {
-    //     eventHandlers.raw?.(messageData);
-    //     await eventHandlers.dispatchRequirements?.(messageData, guildId);
+      //   if (ws.url) await ws.handleDiscordPayload(messageData, guildId);
+      //   else {
+      //     eventHandlers.raw?.(messageData);
+      //     await eventHandlers.dispatchRequirements?.(messageData, guildId);
 
-    //     if (messageData.op !== DiscordGatewayOpcodes.Dispatch) return;
+      //     if (messageData.op !== DiscordGatewayOpcodes.Dispatch) return;
 
-    //     if (!messageData.t) return;
+      //     if (!messageData.t) return;
 
-    //     return handlers[messageData.t]?.(messageData, guildId);
-    //   }
+      //     return handlers[messageData.t]?.(messageData, guildId);
+      //   }
 
-    //   break;
+      //   break;
   }
 }

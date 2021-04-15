@@ -1,4 +1,3 @@
-import { DiscordGatewayPayload } from "../types/gateway/gateway_payload.ts";
 import { Collection } from "../util/collection.ts";
 import { cleanupLoadingShards } from "./cleanup_loading_shards.ts";
 import { createShard } from "./create_shard.ts";
@@ -7,10 +6,10 @@ import { handleDiscordPayload } from "./handle_discord_payload.ts";
 import { handleOnMessage } from "./handle_on_message.ts";
 import { heartbeat } from "./heartbeat.ts";
 import { identify } from "./identify.ts";
+import { processQueue } from "./process_queue.ts";
 import { resharder } from "./resharder.ts";
 import { spawnShards } from "./spawn_shards.ts";
 import { startGateway } from "./start_gateway.ts";
-import { processQueue } from "./process_queue.ts";
 import { tellClusterToIdentify } from "./tell_cluster_to_identify.ts";
 import { DiscordGatewayOpcodes } from "../types/codes/gateway_opcodes.ts";
 import { DiscordVoiceOpcodes } from "../types/codes/voice_opcodes.ts";
@@ -39,8 +38,6 @@ export const ws = {
   firstShardId: 0,
   /** The last shard Id for this cluster. */
   lastShardId: 1,
-  /** This prop decides whether Discord allows our next shard to be started. When 1 starts, this is set to false until it is ready for the next one. */
-  createNextShard: true,
   /** The identify payload holds the necessary data to connect and stay connected with Discords WSS. */
   identifyPayload: {
     token: "",
@@ -84,6 +81,11 @@ export const ws = {
       reject: (reason?: unknown) => void;
       startedAt: number;
     }
+  >(),
+  /** Stored as bucketId: { clusters: [clusterId, [ShardIds]], createNextShard: boolean } */
+  buckets: new Collection<
+    number,
+    { clusters: number[][]; createNextShard: boolean }
   >(),
   utf8decoder: new TextDecoder(),
 
@@ -156,6 +158,8 @@ export interface DiscordenoShard {
   processingQueue: boolean;
   /** When the first request for this minute has been sent. */
   queueStartedAt: number;
+  /** The request counter of the queue */
+  queueCounter: number;
 }
 
 export interface WebSocketRequest {

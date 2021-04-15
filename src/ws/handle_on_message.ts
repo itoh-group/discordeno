@@ -4,6 +4,7 @@ import { DiscordGatewayOpcodes } from "../types/codes/gateway_opcodes.ts";
 import { DiscordGatewayPayload } from "../types/gateway/gateway_payload.ts";
 import { DiscordHello } from "../types/gateway/hello.ts";
 import { DiscordReady } from "../types/gateway/ready.ts";
+import { delay } from "../util/utils.ts";
 import { decompressWith } from "./deps.ts";
 import { identify } from "./identify.ts";
 import { resume } from "./resume.ts";
@@ -37,10 +38,11 @@ export async function handleOnMessage(message: any, shardId: number) {
 
       shard.heartbeat.lastSentAt = Date.now();
       // Discord randomly sends this requiring an immediate heartbeat back
-      shard?.queue.push({
+      shard.queue.unshift({
         op: DiscordGatewayOpcodes.Heartbeat,
         d: shard?.previousSequenceNumber,
       });
+      ws.processQueue(shard.id);
       break;
     case DiscordGatewayOpcodes.Hello:
       ws.heartbeat(
@@ -64,6 +66,9 @@ export async function handleOnMessage(message: any, shardId: number) {
       break;
     case DiscordGatewayOpcodes.InvalidSession:
       ws.log("INVALID_SESSION", { shardId, payload: messageData });
+
+      // We need to wait for a random amount of time between 1 and 5: https://discord.com/developers/docs/topics/gateway#resuming
+      await delay(Math.floor((Math.random() * 4 + 1) * 1000));
 
       // When d is false we need to reidentify
       if (!messageData.d) {
@@ -96,6 +101,13 @@ export async function handleOnMessage(message: any, shardId: number) {
 
         ws.loadingShards.get(shardId)?.resolve(true);
         ws.loadingShards.delete(shardId);
+        // Wait 5 seconds to spawn next shard
+        setTimeout(() => {
+          const bucket = ws.buckets.get(
+            shardId % ws.botGatewayData.sessionStartLimit.maxConcurrency,
+          );
+          if (bucket) bucket.createNextShard = true;
+        }, 5000);
       }
 
       // Update the sequence number if it is present

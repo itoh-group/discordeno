@@ -13,7 +13,7 @@ export function createVoiceConnection(guildId: string) {
   };
 
   socket.onmessage = ({ data: message }) =>
-    ws.handleOnMessage(message, guildId);
+    ws.handleOnMessageVoice(message, guildId);
 
   socket.onclose = (event) => {
     ws.log("VOICE_CLOSED", { guildId, payload: event });
@@ -24,8 +24,8 @@ export function createVoiceConnection(guildId: string) {
       return;
     }
 
-    switch (event.code) {
-    }
+    // switch (event.code) {
+    // }
   };
 
   return socket;

@@ -43,7 +43,6 @@ export async function createUdpConnection(
     transport: "udp",
   };
 
-
   shard.ws.send(
     JSON.stringify({
       op: DiscordVoiceOpcodes.SelectProtocol,

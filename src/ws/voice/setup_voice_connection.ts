@@ -1,6 +1,6 @@
 import { ws } from "../ws.ts";
 import { voiceIdentify } from "./voice_identify.ts";
-import { secretbox } from 'https://esm.sh/@evan/wasm@0.0.50/target/nacl/deno.js';
+import { secretbox } from "https://esm.sh/@evan/wasm@0.0.50/target/nacl/deno.js";
 
 /** Since discord sends the necessary information to connect to voice in different events, we can have those event send info here to aggregate and decide when ready to connect. */
 export function setupVoiceConnection(
@@ -35,7 +35,7 @@ export function setupVoiceConnection(
       udp: undefined,
       sequence: 0,
       timestamp: 0,
-      nonce: new Uint8Array(secretbox.nonce_length)
+      nonce: new Uint8Array(secretbox.nonce_length),
     });
     return;
   }

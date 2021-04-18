@@ -16,6 +16,7 @@ import "./guilds/create_guild.ts";
 import "./channels/category_children.ts";
 import "./channels/channel_overwrite_has_permission.ts";
 import "./channels/create_channel.ts";
+import "./channels/clone_channel.ts";
 import "./channels/delete_channel.ts";
 import "./channels/delete_channel_overwrite.ts";
 import "./channels/edit_channel.ts";
@@ -64,6 +65,9 @@ import "./roles/create_role.ts";
 import "./roles/delete_role.ts";
 import "./roles/edit_role.ts";
 import "./roles/remove_role.ts";
+
+// Members tests
+import "./members/search_members.ts";
 
 // Final cleanup
 import "./guilds/delete_server.ts";

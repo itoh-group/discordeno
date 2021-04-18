@@ -1,3 +1,4 @@
+// deno-lint-ignore require-await
 export async function delayUntil(
   maxMs: number,
   isReady: () => boolean | undefined,
@@ -9,10 +10,7 @@ export async function delayUntil(
     if (isReady() || Date.now() >= maxTime) {
       resolve();
     } else {
-      setTimeout(async () => {
-        await hackyFix(resolve);
-        resolve();
-      }, timeoutTime);
+      setTimeout(async () => hackyFix(resolve), timeoutTime);
     }
   }
 

@@ -109,6 +109,8 @@ export const endpoints = {
   GUILD_MEMBERS: (guildId: string) => `${GUILDS_BASE(guildId)}/members`,
   GUILD_MEMBER_ROLE: (guildId: string, memberId: string, roleId: string) =>
     `${GUILDS_BASE(guildId)}/members/${memberId}/roles/${roleId}`,
+  GUILD_MEMBERS_SEARCH: (guildId: string) =>
+    `${GUILDS_BASE(guildId)}/members/search`,
   GUILD_PRUNE: (guildId: string) => `${GUILDS_BASE(guildId)}/prune`,
   GUILD_REGIONS: (guildId: string) => `${GUILDS_BASE(guildId)}/regions`,
   GUILD_ROLE: (guildId: string, roleId: string) =>
@@ -124,6 +126,8 @@ export const endpoints = {
   GUILD_PREVIEW: (guildId: string) => `${GUILDS_BASE(guildId)}/preview`,
   UPDATE_VOICE_STATE: (guildId: string, userId?: string) =>
     `${GUILDS_BASE(guildId)}/voice-states/${userId ?? "@me"}`,
+  GUILD_WELCOME_SCREEN: (guildId: string) =>
+    `${GUILDS_BASE(guildId)}/welcome-screen`,
 
   // Voice
   VOICE_REGIONS: `${baseEndpoints.BASE_URL}/voice/regions`,

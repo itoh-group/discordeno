@@ -9,8 +9,8 @@ export function createVoiceConnection(guildId: string, url: string) {
     ws.log("VOICE_ERROR", { guildId, error: errorEvent });
   };
 
-  socket.onmessage = ({ data: message }) =>
-    ws.handleOnMessageVoice(message, guildId);
+  socket.onmessage = async ({ data: message }) =>
+    await ws.handleOnMessageVoice(message, guildId);
 
   socket.onclose = (event) => {
     ws.log("VOICE_CLOSED", { guildId, payload: event });

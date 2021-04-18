@@ -31,6 +31,7 @@ export function setupVoiceConnection(
         interval: 0,
         intervalId: 0,
       },
+      udp: undefined
     });
     return;
   }

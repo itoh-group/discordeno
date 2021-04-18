@@ -67,6 +67,7 @@ export function log(
   data: { shardId: number; payload: DiscordGatewayPayload },
 ): unknown;
 export function log(type: "RAW", data: Record<string, unknown>): unknown;
+export function log(type: "VOICE_RAW", data: Record<string, unknown>): unknown;
 export function log(type: "RECONNECT", data: { shardId: number }): unknown;
 export function log(type: "RESUMED", data: { shardId: number }): unknown;
 export function log(type: "RESUMING", data: { shardId: number }): unknown;
@@ -90,6 +91,7 @@ export function log(
     | "IDENTIFYING"
     | "INVALID_SESSION"
     | "RAW"
+    | "VOICE_RAW"
     | "RECONNECT"
     | "RESUMED"
     | "RESUMING"

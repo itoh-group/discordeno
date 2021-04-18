@@ -5,7 +5,7 @@ import { ws } from "../ws.ts";
 
 /** Handler for handling every message event from websocket. */
 // deno-lint-ignore no-explicit-any
-export function handleOnMessageVoice(message: any, guildId: string) {
+export async function handleOnMessageVoice(message: any, guildId: string) {
   if (message instanceof ArrayBuffer) {
     message = new Uint8Array(message);
   }
@@ -23,7 +23,7 @@ export function handleOnMessageVoice(message: any, guildId: string) {
   const shard = ws.voiceShards.get(guildId);
 
   const messageData = JSON.parse(message) as DiscordGatewayPayload;
-  ws.log("RAW", { guildId, payload: messageData });
+  ws.log("VOICE_RAW", { guildId, payload: messageData });
 
   switch (messageData.op) {
     case DiscordVoiceOpcodes.Ready:
@@ -42,6 +42,9 @@ export function handleOnMessageVoice(message: any, guildId: string) {
 
       // Begin heartbeating interval
       ws.voiceHeartbeat(guildId);
+
+      // Create UDP connection for transmitting data
+      shard.udp = await ws.createUdpConnection(guildId, shard.ip!, shard.port!);
       break;
     case DiscordVoiceOpcodes.HeartbeatACK:
       if (!shard) {

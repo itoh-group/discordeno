@@ -18,6 +18,7 @@ import { handleOnMessageVoice } from "./voice/handle_on_message_voice.ts";
 import { setupVoiceConnection } from "./voice/setup_voice_connection.ts";
 import { voiceHeartbeat } from "./voice/voice_heartbeat.ts";
 import { voiceIdentify } from "./voice/voice_identify.ts";
+import { createUdpConnection } from "./voice/create_udp_connection.ts";
 
 // CONTROLLER LIKE INTERFACE FOR WS HANDLING
 export const ws = {
@@ -121,6 +122,7 @@ export const ws = {
 
   // VOICE RELATED
   createVoiceConnection,
+  createUdpConnection,
   handleOnMessageVoice,
   setupVoiceConnection,
   voiceHeartbeat,
@@ -180,6 +182,8 @@ export interface DiscordenoVoiceShard {
   /** The shards available modes we can use when connecting received from discords hello event */
   modes?: string;
   heartbeat: Heartbeat;
+  // deno-lint-ignore no-explicit-any
+  udp: any;
 }
 
 export interface Heartbeat {

@@ -12,6 +12,7 @@
 //         }
 //     }
 // }
+
 // Encryption Modes
 // MODE	KEY	NONCE BYTES	GENERATING NONCE
 // Normal	xsalsa20_poly1305	The nonce bytes are the RTP header	Copy the RTP header
@@ -27,4 +28,5 @@
 //         "secret_key": [ ...251, 100, 11...]
 //     }
 // }
+
 // We can now start encrypting and sending voice data over the previously established UDP connection.

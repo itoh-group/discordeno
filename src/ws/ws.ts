@@ -172,7 +172,7 @@ export interface DiscordenoVoiceShard {
   /** The channelId for this connection, received from VOICE_STATE_UPDATE event when joining a voice channel */
   channelId?: string;
   /** The shards ssrc received from discords hello event */
-  ssrc?: string;
+  ssrc?: number;
   /** The shards ip which we need to connect to received from discords hello event */
   ip?: string;
   /** The shards port which we need to connect to received from discords hello event */

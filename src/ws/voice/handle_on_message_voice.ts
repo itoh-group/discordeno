@@ -55,5 +55,9 @@ export async function handleOnMessageVoice(message: any, guildId: string) {
       }
       shard.heartbeat.acknowledged = true;
       break;
+    case DiscordVoiceOpcodes.SessionDescription:
+      // deno-lint-ignore no-explicit-any
+      shard.secretKey = (messageData.d as any).secret_key;
+      break;
   }
 }

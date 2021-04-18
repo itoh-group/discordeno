@@ -31,7 +31,7 @@ export async function createUdpConnection(
   await shard.udp.send(ipDiscovery, address).catch(console.log);
   const [buffer] = await shard.udp.receive();
 
-  const addressFromDiscord = {
+  shard.address = {
     port: new DataView(buffer.buffer).getUint16(
       buffer.length - 2,
       false,
@@ -40,6 +40,7 @@ export async function createUdpConnection(
     hostname: Deno.core.decode(
       buffer.subarray(8, buffer.indexOf(0, 8)),
     ),
+    transport: "udp",
   };
 
 
@@ -48,8 +49,8 @@ export async function createUdpConnection(
       op: DiscordVoiceOpcodes.SelectProtocol,
       d: {
         protocol: "udp",
-        address: addressFromDiscord.hostname,
-        port: addressFromDiscord.port,
+        address: shard.address.hostname,
+        port: shard.address.port,
         mode: "xsalsa20_poly1305",
       },
     }),

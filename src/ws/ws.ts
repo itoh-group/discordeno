@@ -19,6 +19,7 @@ import { setupVoiceConnection } from "./voice/setup_voice_connection.ts";
 import { voiceHeartbeat } from "./voice/voice_heartbeat.ts";
 import { voiceIdentify } from "./voice/voice_identify.ts";
 import { createUdpConnection } from "./voice/create_udp_connection.ts";
+import { sendVoice } from "./voice/send_voice.ts";
 
 // CONTROLLER LIKE INTERFACE FOR WS HANDLING
 export const ws = {
@@ -125,6 +126,7 @@ export const ws = {
   createUdpConnection,
   handleOnMessageVoice,
   setupVoiceConnection,
+  sendVoice,
   voiceHeartbeat,
   voiceIdentify,
 };
@@ -184,6 +186,17 @@ export interface DiscordenoVoiceShard {
   heartbeat: Heartbeat;
   // deno-lint-ignore no-explicit-any
   udp: any;
+  sequence: number;
+  timestamp: number;
+  nonce: Uint8Array;
+  view?: DataView;
+  frame?: Uint8Array;
+  address?: {
+    port: number;
+    hostname: string;
+    transport: "udp";
+  };
+  secretKey: number[];
 }
 
 export interface Heartbeat {

@@ -13,8 +13,11 @@ import { startGateway } from "./start_gateway.ts";
 import { tellClusterToIdentify } from "./tell_cluster_to_identify.ts";
 import { DiscordGatewayOpcodes } from "../types/codes/gateway_opcodes.ts";
 import { DiscordVoiceOpcodes } from "../types/codes/voice_opcodes.ts";
-import { setupVoiceConnection } from "./voice/setup_voice_connection.ts";
 import { createVoiceConnection } from "./voice/create_voice_connection.ts";
+import { handleOnMessageVoice } from "./voice/handle_on_message_voice.ts";
+import { setupVoiceConnection } from "./voice/setup_voice_connection.ts";
+import { voiceHeartbeat } from "./voice/voice_heartbeat.ts";
+import { voiceIdentify } from "./voice/voice_identify.ts";
 
 // CONTROLLER LIKE INTERFACE FOR WS HANDLING
 export const ws = {
@@ -118,7 +121,10 @@ export const ws = {
 
   // VOICE RELATED
   createVoiceConnection,
+  handleOnMessageVoice,
   setupVoiceConnection,
+  voiceHeartbeat,
+  voiceIdentify,
 };
 
 export interface DiscordenoShard {
@@ -138,20 +144,7 @@ export interface DiscordenoShard {
   ready: boolean;
   /** The list of guild ids that are currently unavailable due to an outage. */
   unavailableGuildIds: Set<string>;
-  heartbeat: {
-    /** The exact timestamp the last heartbeat was sent */
-    lastSentAt: number;
-    /** The timestamp the last heartbeat ACK was received from discord. */
-    lastReceivedAt: number;
-    /** Whether or not the heartbeat was acknowledged  by discord in time. */
-    acknowledged: boolean;
-    /** Whether or not to keep heartbeating. Useful for when needing to stop heartbeating. */
-    keepAlive: boolean;
-    /** The interval between heartbeats requested by discord. */
-    interval: number;
-    /** The id of the interval, useful for stopping the interval if ws closed. */
-    intervalId: number;
-  };
+  heartbeat: Heartbeat;
   /** The items/requestst that are in queue to be sent to this shard websocket. */
   queue: WebSocketRequest[];
   /** Whether or not the queue for this shard is being processed. */
@@ -168,6 +161,8 @@ export interface WebSocketRequest {
 }
 
 export interface DiscordenoVoiceShard {
+  /** The websocket for this shard */
+  ws: WebSocket;
   /** The token for this connection, received from VOICE_SERVER_UPDATE event when joining a voice channel */
   token?: string;
   /** The url for this connection, received from VOICE_SERVER_UPDATE event when joining a voice channel */
@@ -177,11 +172,27 @@ export interface DiscordenoVoiceShard {
   /** The channelId for this connection, received from VOICE_STATE_UPDATE event when joining a voice channel */
   channelId?: string;
   /** The shards ssrc received from discords hello event */
-  ssrc: string;
+  ssrc?: string;
   /** The shards ip which we need to connect to received from discords hello event */
-  ip: string;
+  ip?: string;
   /** The shards port which we need to connect to received from discords hello event */
-  port: string;
+  port?: number;
   /** The shards available modes we can use when connecting received from discords hello event */
-  modes: string;
+  modes?: string;
+  heartbeat: Heartbeat;
+}
+
+export interface Heartbeat {
+  /** The exact timestamp the last heartbeat was sent */
+  lastSentAt: number;
+  /** The timestamp the last heartbeat ACK was received from discord. */
+  lastReceivedAt: number;
+  /** Whether or not the heartbeat was acknowledged  by discord in time. */
+  acknowledged: boolean;
+  /** Whether or not to keep heartbeating. Useful for when needing to stop heartbeating. */
+  keepAlive: boolean;
+  /** The interval between heartbeats requested by discord. */
+  interval: number;
+  /** The id of the interval, useful for stopping the interval if ws closed. */
+  intervalId: number;
 }

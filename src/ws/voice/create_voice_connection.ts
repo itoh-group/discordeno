@@ -1,11 +1,8 @@
 import { VOICE_GATEWAY_VERSION } from "../../util/constants.ts";
 import { ws } from "../ws.ts";
 
-export function createVoiceConnection(guildId: string) {
-  const shard = ws.voiceShards.get(guildId);
-  if (!shard) return;
-
-  const socket = new WebSocket(`wss://${shard.url}?v=${VOICE_GATEWAY_VERSION}`);
+export function createVoiceConnection(guildId: string, url: string) {
+  const socket = new WebSocket(`wss://${url}?v=${VOICE_GATEWAY_VERSION}`);
   socket.binaryType = "arraybuffer";
 
   socket.onerror = (errorEvent) => {
@@ -19,7 +16,7 @@ export function createVoiceConnection(guildId: string) {
     ws.log("VOICE_CLOSED", { guildId, payload: event });
     if (
       event.code === 3064 ||
-      event.reason === "Discordeno Testing Finished! Do Not RESUME!"
+      event.reason === "Discordeno Voice Testing Finished! Do Not RESUME!"
     ) {
       return;
     }

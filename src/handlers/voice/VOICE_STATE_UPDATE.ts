@@ -56,7 +56,7 @@ export async function handleVoiceStateUpdate(data: DiscordGatewayPayload) {
   }
 
   if (member.id === botId && payload.channelId) {
-    ws.setupVoiceConnection(guild.shardId, guild.id, {
+    ws.setupVoiceConnection(guild.id, {
       sessionId: payload.sessionId,
       channelId: payload.channelId,
     });

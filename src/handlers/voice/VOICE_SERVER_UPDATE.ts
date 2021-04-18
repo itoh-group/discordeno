@@ -16,9 +16,9 @@ export async function handleVoiceServerUpdate(data: DiscordGatewayPayload) {
   const guild = await cacheHandlers.get("guilds", payload.guildId);
   if (!guild) return;
 
-  ws.setupVoiceConnection(guild.shardId, guild.id, {
+  ws.setupVoiceConnection(guild.id, {
     token: payload.token,
-    url: payload.endpoint,
+    url: payload.endpoint!,
   });
   eventHandlers.voiceServerUpdate?.(payload, guild);
 }

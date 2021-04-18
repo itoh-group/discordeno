@@ -1,5 +1,5 @@
 import { DiscordGatewayPayload } from "../types/gateway/gateway_payload.ts";
-import { DiscordenoShard } from "./ws.ts";
+import { DiscordenoShard, DiscordenoVoiceShard } from "./ws.ts";
 
 /** The handler for logging different actions happening inside the ws. User can override and put custom handling per event. */
 export function log(
@@ -8,7 +8,7 @@ export function log(
 ): unknown;
 export function log(
   type: "VOICE_CLOSED",
-  data: { guildId: number; payload: CloseEvent },
+  data: { guildId: string; payload: CloseEvent },
 ): unknown;
 export function log(
   type: "CLOSED_RECONNECT",
@@ -16,7 +16,7 @@ export function log(
 ): unknown;
 export function log(
   type: "VOICE_CLOSED_RECONNECT",
-  data: { guildId: number; payload: CloseEvent },
+  data: { guildId: string; payload: CloseEvent },
 ): unknown;
 export function log(
   type: "ERROR",
@@ -24,7 +24,7 @@ export function log(
 ): unknown;
 export function log(
   type: "VOICE_ERROR",
-  data: Record<string, unknown> & { guildId: number },
+  data: Record<string, unknown> & { guildId: string },
 ): unknown;
 export function log(
   type: "HEARTBEATING",
@@ -41,6 +41,22 @@ export function log(
 export function log(
   type: "HEARTBEATING_STARTED",
   data: { shardId: number; interval: number },
+): unknown;
+export function log(
+  type: "VOICE_HEARTBEATING",
+  data: { guildId: string; shard: DiscordenoVoiceShard },
+): unknown;
+export function log(
+  type: "VOICE_HEARTBEATING_CLOSED",
+  data: { guildId: string; shard: DiscordenoVoiceShard },
+): unknown;
+export function log(
+  type: "VOICE_HEARTBEATING_DETAILS",
+  data: { guildId: string; interval: number; shard: DiscordenoVoiceShard },
+): unknown;
+export function log(
+  type: "VOICE_HEARTBEATING_STARTED",
+  data: { guildId: string; interval: number },
 ): unknown;
 export function log(
   type: "IDENTIFYING",
@@ -67,6 +83,10 @@ export function log(
     | "HEARTBEATING_CLOSED"
     | "HEARTBEATING_DETAILS"
     | "HEARTBEATING_STARTED"
+    | "VOICE_HEARTBEATING"
+    | "VOICE_HEARTBEATING_CLOSED"
+    | "VOICE_HEARTBEATING_DETAILS"
+    | "VOICE_HEARTBEATING_STARTED"
     | "IDENTIFYING"
     | "INVALID_SESSION"
     | "RAW"

@@ -97,7 +97,7 @@ const baseGuild: Partial<DiscordenoGuild> = {
       memberCount: this.memberCount,
       voiceStates: this.voiceStates,
       members: this.members,
-      channels: this.channels,
+      channels: this.channels?.map((r) => r.toJSON()) || [],
       threads: this.threads,
       presences: this.presences,
       maxPresences: this.maxPresences,

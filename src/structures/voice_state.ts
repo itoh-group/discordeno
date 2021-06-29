@@ -1,11 +1,7 @@
 import { eventHandlers } from "../bot.ts";
-import { cache } from "../cache.ts";
-import type { GuildMember } from "../types/members/guild_member.ts";
 import type { VoiceState } from "../types/voice/voice_state.ts";
 import { snowflakeToBigint } from "../util/bigint.ts";
 import { createNewProp } from "../util/utils.ts";
-import { DiscordenoGuild } from "./guild.ts";
-import { DiscordenoMember } from "./member.ts";
 
 const VOICE_STATE_SNOWFLAKES = ["userId", "channelId", "guildId"];
 
@@ -27,15 +23,6 @@ export const voiceStateToggles = {
 };
 
 const baseRole: Partial<DiscordenoVoiceState> = {
-  get member() {
-    return cache.members.get(this.userId!);
-  },
-  get guildMember() {
-    return this.member?.guilds.get(this.guildId!);
-  },
-  get guild() {
-    return cache.guilds.get(this.guildId!);
-  },
   get deaf() {
     return Boolean(this.bitfield! & voiceStateToggles.deaf);
   },
@@ -62,7 +49,7 @@ const baseRole: Partial<DiscordenoVoiceState> = {
       guildId: this.guildId?.toString(),
       channelId: this.channelId?.toString(),
       userId: this.userId?.toString(),
-      member: this.member,
+      // member: this.member,
       sessionId: this.sessionId,
       deaf: this.deaf,
       mute: this.mute,
@@ -122,14 +109,7 @@ export interface DiscordenoVoiceState extends Omit<VoiceState, "channelId" | "gu
   bitfield: bigint;
 
   // GETTERS
-  member: DiscordenoMember;
-  guildMember?: Omit<GuildMember, "joinedAt" | "premiumSince" | "roles"> & {
-    joinedAt?: number;
-    premiumSince?: number;
-    roles: bigint[];
-  };
-  /** The guild where this role is. If undefined, the guild is not cached */
-  guild?: DiscordenoGuild;
+
   /** Converts to the raw JSON format. */
   toJSON(): VoiceState;
 }
